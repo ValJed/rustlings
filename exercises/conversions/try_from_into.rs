@@ -12,8 +12,6 @@ struct Color {
     blue: u8,
 }
 
-// I AM NOT DONE
-
 // Your task is to complete this implementation
 // and return an Ok result of inner type Color.
 // You need to create an implementation for a tuple of three integers,
@@ -25,20 +23,54 @@ struct Color {
 
 // Tuple implementation
 impl TryFrom<(i16, i16, i16)> for Color {
-    type Error = Box<dyn error::Error>;
-    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {}
+    type Error = String;
+    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let min = u8::MIN as i16;
+        let max = u8::MAX as i16;
+
+        if tuple.0 < min || tuple.0 > max ||
+        tuple.1 < min || tuple.1 > max ||
+        tuple.2 < min || tuple.2 > max {
+            Err("On a un problème Youston !!".into())
+        } else {
+            Ok(Color { red: tuple.0 as u8, green: tuple.1 as u8, blue: tuple.2 as u8})
+        }
+
+    }
 }
 
 // Array implementation
 impl TryFrom<[i16; 3]> for Color {
-    type Error = Box<dyn error::Error>;
-    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {}
+    type Error = String;
+    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        let min = u8::MIN as i16;
+        let max = u8::MAX as i16;
+
+        // if let Some(val) = arr.iter().find(|num| num < &&min || num > &&max) {
+        //     Err("Salut les cons".into())
+        // } else {
+        //     Ok(Color {red : arr[0] as u8, green: arr[1] as u8, blue: arr[2] as u8})
+        // }
+
+        match arr.iter().find(|num| num < &&min || num > &&max) {
+            Some(val) => Err("Et bah nan..".into()),
+            None => Ok(Color {red : arr[0] as u8, green: arr[1] as u8, blue: arr[2] as u8})
+        }
+    }
 }
 
 // Slice implementation
 impl TryFrom<&[i16]> for Color {
-    type Error = Box<dyn error::Error>;
-    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {}
+    type Error = String;
+    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        let min = u8::MIN as i16;
+        let max = u8::MAX as i16;
+
+        match slice.iter().find(|num| num < &&min || num > &&max || slice.len() != 3) {
+            Some(val) => Err("Et bah nan..".into()),
+            None => Ok(Color {red : slice[0] as u8, green: slice[1] as u8, blue: slice[2] as u8})
+        }
+    }
 }
 
 fn main() {
